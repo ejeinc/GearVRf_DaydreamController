@@ -1,6 +1,6 @@
 package com.eje_c.daydreamcontroller;
 
-import com.eje_c.daydreamcontroller.arm_model.ArmModel;
+import com.eje_c.daydreamcontroller.arm_model.GvrArmModel;
 import com.eje_c.daydreamcontroller.arm_model.UpdateDataFactory;
 import com.google.vr.sdk.controller.Controller;
 import com.google.vr.sdk.controller.ControllerManager;
@@ -23,7 +23,7 @@ class Main extends GVRMain {
     private ControllerManager controllerManager;
     private GVRSceneObject controllerModel; // loaded from controller/vr_controller_daydream.obj
     private GVRSceneObject pointTarget;
-    private final ArmModel armModel = new ArmModel();
+    private final GvrArmModel armModel = new GvrArmModel();
     private final GVRDrawFrameListener controllerDrawer = new GVRDrawFrameListener() {
         @Override
         public void onDrawFrame(float frameTime) {
@@ -33,8 +33,8 @@ class Main extends GVRMain {
             controller.update();
 
             // Update controller model position
-            ArmModel.UpdateData updateData = UpdateDataFactory.create(getGVRContext(), controller, frameTime);
-            armModel.Update(updateData);
+            GvrArmModel.UpdateData updateData = UpdateDataFactory.create(getGVRContext(), controller, frameTime);
+            armModel.update(updateData);
 
             Vector3f pos = armModel.getControllerPosition();
             controllerModel.getTransform().setPosition(pos.x(), pos.y(), pos.z());

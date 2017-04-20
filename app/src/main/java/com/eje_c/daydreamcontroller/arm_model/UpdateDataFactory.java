@@ -14,9 +14,9 @@ public class UpdateDataFactory {
     private static final Quaternionf orientation = new Quaternionf();
 
     /**
-     * Create {@link com.eje_c.daydreamcontroller.arm_model.ArmModel.UpdateData} from {@link Controller}.
+     * Create {@link GvrArmModel.UpdateData} from {@link Controller}.
      */
-    public static ArmModel.UpdateData create(GVRContext gvr, Controller controller, float frameTime) {
+    public static GvrArmModel.UpdateData create(GVRContext gvr, Controller controller, float frameTime) {
 
         // update current forward vector
         gvr.getMainScene().getMainCameraRig().getHeadTransform()
@@ -25,6 +25,6 @@ public class UpdateDataFactory {
         // set controller orientation
         orientation.set(controller.orientation.x, controller.orientation.y, controller.orientation.z, controller.orientation.w);
 
-        return new ArmModel.UpdateData(true, ZERO, orientation, ZERO, FORWARD, ZERO, frameTime);
+        return new GvrArmModel.UpdateData(true, ZERO, orientation, ZERO, FORWARD, ZERO, frameTime);
     }
 }

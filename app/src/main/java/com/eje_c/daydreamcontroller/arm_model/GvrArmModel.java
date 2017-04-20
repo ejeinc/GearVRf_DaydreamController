@@ -7,7 +7,7 @@ import org.joml.Vector3f;
  * Arm model from https://github.com/EpicGames/UnrealEngine/tree/release/Engine/Plugins/Runtime/GoogleVR/GoogleVRController/Source/GoogleVRController/Private/ArmModel
  */
 
-public class ArmModel {
+public class GvrArmModel {
     private static final Vector3f FORWARD = new Vector3f(0.0f, 0.0f, -1.0f);
     private static final Vector3f UP = new Vector3f(0.0f, 1.0f, 0.0f);
     private static final Vector3f POINTER_OFFSET = new Vector3f(0.0f, -0.009f, -0.109f);
@@ -86,7 +86,7 @@ public class ArmModel {
 
     private boolean firstUpdate = true;
 
-    public ArmModel() {
+    public GvrArmModel() {
         updateHandedness();
     }
 
@@ -189,7 +189,7 @@ public class ArmModel {
         shoulderPosition.mul(handedMultiplier);
     }
 
-    public void Update(UpdateData updateData) {
+    public void update(UpdateData updateData) {
         updateHandedness();
         updateTorsoDirection(updateData);
 
