@@ -13,6 +13,7 @@ import org.gearvrf.GVRMeshCollider;
 import org.gearvrf.GVRPicker;
 import org.gearvrf.GVRScene;
 import org.gearvrf.GVRSceneObject;
+import org.gearvrf.GVRTexture;
 import org.gearvrf.scene_objects.GVRModelSceneObject;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -20,9 +21,21 @@ import org.joml.Vector3f;
 import java.io.IOException;
 
 class Main extends GVRMain {
+
+    // Daydream controller manager
     private ControllerManager controllerManager;
-    private GVRSceneObject controllerModel; // loaded from controller/vr_controller_daydream.obj
+
+    // loaded from controller/vr_controller_daydream.obj
+    private GVRSceneObject controllerModel;
+
+    // GearVRf logo
     private GVRSceneObject pointTarget;
+
+    // Logo variations
+    private GVRTexture defaultTexture;
+    private GVRTexture focusTexture;
+    private GVRTexture pressedTexture;
+
     private final GvrArmModel armModel = new GvrArmModel();
     private final GVRDrawFrameListener controllerDrawer = new GVRDrawFrameListener() {
         @Override
@@ -52,11 +65,36 @@ class Main extends GVRMain {
                 }
             }
 
-            // Change object opacity
+            // Change object texture
             if (hitWithTestObject) {
-                pointTarget.getRenderData().getMaterial().setOpacity(0.5f);
+
+                // Pointing
+
+                if (controller.clickButtonState) {
+
+                    // Pointing & Pressing
+
+                    pointTarget.getRenderData().getMaterial().setMainTexture(pressedTexture);
+
+                    if (pointTarget.getTransform().getScaleX() == 1.0f) {
+                        pointTarget.getTransform().setScale(0.95f, 0.95f, 0.95f);
+                    }
+
+                } else {
+
+                    // Pointing & Not pressing
+
+                    pointTarget.getRenderData().getMaterial().setMainTexture(focusTexture);
+
+                    if (pointTarget.getTransform().getScaleX() != 1.0f) {
+                        pointTarget.getTransform().setScale(1.0f, 1.0f, 1.0f);
+                    }
+                }
             } else {
-                pointTarget.getRenderData().getMaterial().setOpacity(1f);
+
+                // Not pointing
+
+                pointTarget.getRenderData().getMaterial().setMainTexture(defaultTexture);
             }
         }
     };
@@ -67,7 +105,10 @@ class Main extends GVRMain {
         GVRScene scene = gvr.getMainScene();
 
         // Put point target in scene
-        pointTarget = new GVRSceneObject(gvr, 3.00f, 2.73f, gvr.getAssetLoader().loadTexture(new GVRAndroidResource(gvr, "gearvr_logo.jpg")));
+        defaultTexture = gvr.getAssetLoader().loadTexture(new GVRAndroidResource(gvr, R.raw.logo_default));
+        focusTexture = gvr.getAssetLoader().loadTexture(new GVRAndroidResource(gvr, R.raw.logo_focus));
+        pressedTexture = gvr.getAssetLoader().loadTexture(new GVRAndroidResource(gvr, R.raw.logo_pressed));
+        pointTarget = new GVRSceneObject(gvr, 3.00f, 2.73f, defaultTexture);
         pointTarget.getTransform().setPosition(0, 1, -10);
         pointTarget.attachCollider(new GVRMeshCollider(gvr, false));
         scene.addSceneObject(pointTarget);
