@@ -14,6 +14,7 @@ import org.gearvrf.GVRPicker;
 import org.gearvrf.GVRScene;
 import org.gearvrf.GVRSceneObject;
 import org.gearvrf.GVRTexture;
+import org.gearvrf.animation.GVRScaleAnimation;
 import org.gearvrf.scene_objects.GVRModelSceneObject;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -77,7 +78,8 @@ class Main extends GVRMain {
                     pointTarget.getRenderData().getMaterial().setMainTexture(pressedTexture);
 
                     if (pointTarget.getTransform().getScaleX() == 1.0f) {
-                        pointTarget.getTransform().setScale(0.95f, 0.95f, 0.95f);
+                        GVRScaleAnimation animation = new GVRScaleAnimation(pointTarget, 0.1f, 0.95f);
+                        getGVRContext().getAnimationEngine().start(animation);
                     }
 
                 } else {
@@ -87,7 +89,8 @@ class Main extends GVRMain {
                     pointTarget.getRenderData().getMaterial().setMainTexture(focusTexture);
 
                     if (pointTarget.getTransform().getScaleX() != 1.0f) {
-                        pointTarget.getTransform().setScale(1.0f, 1.0f, 1.0f);
+                        GVRScaleAnimation animation = new GVRScaleAnimation(pointTarget, 0.1f, 1.0f);
+                        getGVRContext().getAnimationEngine().start(animation);
                     }
                 }
             } else {
@@ -95,6 +98,11 @@ class Main extends GVRMain {
                 // Not pointing
 
                 pointTarget.getRenderData().getMaterial().setMainTexture(defaultTexture);
+
+                if (pointTarget.getTransform().getScaleX() != 1.0f) {
+                    GVRScaleAnimation animation = new GVRScaleAnimation(pointTarget, 0.1f, 1.0f);
+                    getGVRContext().getAnimationEngine().start(animation);
+                }
             }
         }
     };
